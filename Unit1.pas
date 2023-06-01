@@ -237,7 +237,7 @@ procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   CanClose := False;
   TrayIcon1.Icon.Assign(Application.Icon);
-  // свою икону можно и из Инспектора назначить. просто без иконы не будет видно  значка в трее
+  // СЃРІРѕСЋ РёРєРѕРЅСѓ РјРѕР¶РЅРѕ Рё РёР· РРЅСЃРїРµРєС‚РѕСЂР° РЅР°Р·РЅР°С‡РёС‚СЊ. РїСЂРѕСЃС‚Рѕ Р±РµР· РёРєРѕРЅС‹ РЅРµ Р±СѓРґРµС‚ РІРёРґРЅРѕ  Р·РЅР°С‡РєР° РІ С‚СЂРµРµ
   TrayIcon1.Visible := true;
   ShowWindow(handle, SW_HIDE);
 end;
@@ -272,7 +272,7 @@ begin
   tHM := OpenMutex(MUTEX_ALL_ACCESS, False, HMName);
   if (tHM <> 0) then
   begin
-    Showmessage('Приложение уже запушено');
+    Showmessage('РџСЂРёР»РѕР¶РµРЅРёРµ СѓР¶Рµ Р·Р°РїСѓС€РµРЅРѕ');
     CloseHandle(tHM);
     Application.Terminate;
   end
@@ -284,47 +284,47 @@ begin
     // Application.ShowMainForm := False;
     ShowWindow(handle, SW_HIDE);
     TrayIcon1.Icon.Assign(Application.Icon);
-    // свою икону можно и из Инспектора назначить. просто без иконы не будет видно  значка в трее
+    // СЃРІРѕСЋ РёРєРѕРЅСѓ РјРѕР¶РЅРѕ Рё РёР· РРЅСЃРїРµРєС‚РѕСЂР° РЅР°Р·РЅР°С‡РёС‚СЊ. РїСЂРѕСЃС‚Рѕ Р±РµР· РёРєРѕРЅС‹ РЅРµ Р±СѓРґРµС‚ РІРёРґРЅРѕ  Р·РЅР°С‡РєР° РІ С‚СЂРµРµ
     TrayIcon1.Visible := true;
     IdHTTPServer1.Active := true;
     /// /////////////////////////////////////////////////////////////////////////////////
-    // 1. Открываем файл
+    // 1. РћС‚РєСЂС‹РІР°РµРј С„Р°Р№Р»
     hPort := CreateFile('COM8', GENERIC_READ or GENERIC_WRITE,
       FILE_SHARE_READ or FILE_SHARE_WRITE, nil, OPEN_EXISTING,
       FILE_ATTRIBUTE_NORMAL, 0);
-    // 2. Контроль ошибок
+    // 2. РљРѕРЅС‚СЂРѕР»СЊ РѕС€РёР±РѕРє
     if hPort = INVALID_HANDLE_VALUE then
     begin
-      Memo1.Lines.Add('Обнаружена ошибка, порт открыть не удалось');
-      // Обнаружена ошибка, порт открыть не удалось
+      Memo1.Lines.Add('РћР±РЅР°СЂСѓР¶РµРЅР° РѕС€РёР±РєР°, РїРѕСЂС‚ РѕС‚РєСЂС‹С‚СЊ РЅРµ СѓРґР°Р»РѕСЃСЊ');
+      // РћР±РЅР°СЂСѓР¶РµРЅР° РѕС€РёР±РєР°, РїРѕСЂС‚ РѕС‚РєСЂС‹С‚СЊ РЅРµ СѓРґР°Р»РѕСЃСЊ
       Exit;
     end
     else
-      Memo1.Lines.Add('COM порт был открыт');
-    // 3. Чтение текущих настроек порта
+      Memo1.Lines.Add('COM РїРѕСЂС‚ Р±С‹Р» РѕС‚РєСЂС‹С‚');
+    // 3. Р§С‚РµРЅРёРµ С‚РµРєСѓС‰РёС… РЅР°СЃС‚СЂРѕРµРє РїРѕСЂС‚Р°
     if GetCommState(hPort, DCB) then;
-    // 4. Настройки:
-    // Скорость обмена
+    // 4. РќР°СЃС‚СЂРѕР№РєРё:
+    // РЎРєРѕСЂРѕСЃС‚СЊ РѕР±РјРµРЅР°
     Memo1.Lines.Add(IntToStr(DCB.BaudRate));
     DCB.BaudRate := 115200;
-    // Число бит на символ
+    // Р§РёСЃР»Рѕ Р±РёС‚ РЅР° СЃРёРјРІРѕР»
     Memo1.Lines.Add(IntToStr(DCB.ByteSize));
     DCB.ByteSize := 8;
-    // Стоп-биты
+    // РЎС‚РѕРї-Р±РёС‚С‹
     Memo1.Lines.Add(IntToStr(DCB.StopBits));
     DCB.StopBits := 1;
-    // Четность
+    // Р§РµС‚РЅРѕСЃС‚СЊ
     Memo1.Lines.Add(IntToStr(DCB.Parity));
     DCB.Parity := 0;
     Memo1.Lines.Add(IntToStr(DCB.Flags));
     DCB.Flags := 20625;
-    // 5. Передача настроек
+    // 5. РџРµСЂРµРґР°С‡Р° РЅР°СЃС‚СЂРѕРµРє
     if not SetCommState(hPort, DCB) then
-      Memo1.Lines.Add('ошибка настройки порта');
-    // 6. Настройка буферов порта (очередей ввода и вывода)
+      Memo1.Lines.Add('РѕС€РёР±РєР° РЅР°СЃС‚СЂРѕР№РєРё РїРѕСЂС‚Р°');
+    // 6. РќР°СЃС‚СЂРѕР№РєР° Р±СѓС„РµСЂРѕРІ РїРѕСЂС‚Р° (РѕС‡РµСЂРµРґРµР№ РІРІРѕРґР° Рё РІС‹РІРѕРґР°)
     if not SetupComm(hPort, 16, 16) then
-      Memo1.Lines.Add('ошибка настройки буферов');
-    // 7. Сброс буфферов и очередей
+      Memo1.Lines.Add('РѕС€РёР±РєР° РЅР°СЃС‚СЂРѕР№РєРё Р±СѓС„РµСЂРѕРІ');
+    // 7. РЎР±СЂРѕСЃ Р±СѓС„С„РµСЂРѕРІ Рё РѕС‡РµСЂРµРґРµР№
     if PurgeComm(hPort, PURGE_TXABORT or PURGE_RXABORT or PURGE_TXCLEAR or
       PURGE_RXCLEAR) then;
     // ...............
@@ -336,8 +336,8 @@ begin
       CT.ReadTotalTimeoutConstant := 50;
     CT.ReadIntervalTimeout := 50;
     CT.ReadTotalTimeoutMultiplier := 10;
-    // Какие только значения не ставил, не работает...(В версии программы когда работала, время
-    // опроса контроллера ~70ms
+    // РљР°РєРёРµ С‚РѕР»СЊРєРѕ Р·РЅР°С‡РµРЅРёСЏ РЅРµ СЃС‚Р°РІРёР», РЅРµ СЂР°Р±РѕС‚Р°РµС‚...(Р’ РІРµСЂСЃРёРё РїСЂРѕРіСЂР°РјРјС‹ РєРѕРіРґР° СЂР°Р±РѕС‚Р°Р»Р°, РІСЂРµРјСЏ
+    // РѕРїСЂРѕСЃР° РєРѕРЅС‚СЂРѕР»Р»РµСЂР° ~70ms
     CT.WriteTotalTimeoutMultiplier := 10;
     CT.WriteTotalTimeoutConstant := 50;
 
@@ -423,7 +423,7 @@ procedure TForm1.IdHTTPServer1CommandGet(AContext: TIdContext;
 var
   k: string;
   S: string;
-  MyBuff: Array [0 .. 1] Of Char; // буфер для чтения данных
+  MyBuff: Array [0 .. 1] Of Char; // Р±СѓС„РµСЂ РґР»СЏ С‡С‚РµРЅРёСЏ РґР°РЅРЅС‹С…
   GetStr, tempStr: String;
   // l: Cardinal;
   // ch: array of AnsiChar;
@@ -440,7 +440,7 @@ begin
   Memo1.Lines.Add('Text: ' + ARequestInfo.Params.GetText);
   Memo1.Lines.Add('k: ' + k);
   Memo1.Lines.Add(DateToStr(Date) + ' - ' + TimeToStr(Time) +
-    ':  Найден новый объект:');
+    ':  РќР°Р№РґРµРЅ РЅРѕРІС‹Р№ РѕР±СЉРµРєС‚:');
   GetStr := ARequestInfo.Params.GetText;
   // GetStr := 'http://localhost/get?stream={streamIdx}&dt={datetime}&pl={plate}&dr=Enter&img={image}';
   tempStr := GetStr;
@@ -450,7 +450,7 @@ begin
   Memo1.Lines.Add(GetStr);
   // Showmessage(tempStr);
   /// ////////////////////////////////////////////////////////
-  /// Тут парсим данные номера и показываем его на экране крупным шрифтом
+  /// РўСѓС‚ РїР°СЂСЃРёРј РґР°РЅРЅС‹Рµ РЅРѕРјРµСЂР° Рё РїРѕРєР°Р·С‹РІР°РµРј РµРіРѕ РЅР° СЌРєСЂР°РЅРµ РєСЂСѓРїРЅС‹Рј С€СЂРёС„С‚РѕРј
   // NumPlate.Caption := tempStr;
   // Memo1.Visible := False;
   // NumPlate.Visible := True;
@@ -462,9 +462,9 @@ begin
   // Delay(5000);
   // NumPlate.Visible := False;
 
-  // Timer1.Interval := 7000; // устанавливаем паузу в мс
-  // Timer1.Enabled := True; // включаем таймер
-  // while Timer1.Enabled do // пока таймер включен, держим паузу
+  // Timer1.Interval := 7000; // СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РїР°СѓР·Сѓ РІ РјСЃ
+  // Timer1.Enabled := True; // РІРєР»СЋС‡Р°РµРј С‚Р°Р№РјРµСЂ
+  // while Timer1.Enabled do // РїРѕРєР° С‚Р°Р№РјРµСЂ РІРєР»СЋС‡РµРЅ, РґРµСЂР¶РёРј РїР°СѓР·Сѓ
   // begin
   // Application.ProcessMessages;
   // end;
@@ -472,21 +472,21 @@ begin
   // NumPlate.Visible := False;
   // Memo1.Visible := True;
   /// ////////////////////////////////////////////////////////
-  AResponseInfo.ContentText := '<H1>Открыть шлагбаум</H1>';
+  AResponseInfo.ContentText := '<H1>РћС‚РєСЂС‹С‚СЊ С€Р»Р°РіР±Р°СѓРј</H1>';
   AResponseInfo.charset := 'windows-1251';
   AResponseInfo.ContentLanguage := 'ru';
 
   { try
     begin
-    H := FindWindow(nil, 'Орион Про. Монитор оперативной задачи');
+    H := FindWindow(nil, 'РћСЂРёРѕРЅ РџСЂРѕ. РњРѕРЅРёС‚РѕСЂ РѕРїРµСЂР°С‚РёРІРЅРѕР№ Р·Р°РґР°С‡Рё');
     if H = 0 then
-    s := 'Не удалось передать команду управления:  Орион Про закрыт.'
+    s := 'РќРµ СѓРґР°Р»РѕСЃСЊ РїРµСЂРµРґР°С‚СЊ РєРѕРјР°РЅРґСѓ СѓРїСЂР°РІР»РµРЅРёСЏ:  РћСЂРёРѕРЅ РџСЂРѕ Р·Р°РєСЂС‹С‚.'
     else
     begin
-    SetForegroundWindow(H); // Окно на передний план - иначе не воспринимает
+    SetForegroundWindow(H); // РћРєРЅРѕ РЅР° РїРµСЂРµРґРЅРёР№ РїР»Р°РЅ - РёРЅР°С‡Рµ РЅРµ РІРѕСЃРїСЂРёРЅРёРјР°РµС‚
     PostMessage(H, WM_KEYDOWN, VK_F11, 0);
     PostMessage(H, WM_KEYUP, VK_F11, 0);
-    s := 'Доступ предоставлен';
+    s := 'Р”РѕСЃС‚СѓРї РїСЂРµРґРѕСЃС‚Р°РІР»РµРЅ';
     end;
     Memo1.Lines.Add(s);
     Memo1.Lines.Add('');
@@ -525,14 +525,14 @@ begin
       // WriteFile(hPort, MyBuff, l, NumberOfBytesWritten, nil);
       // ch := char($0);
       // WriteFile(hPort, ch, l, NumberOfBytesWritten, nil);
-      // Переводим в ANSI
+      // РџРµСЂРµРІРѕРґРёРј РІ ANSI
       Buf := AnsiString(S { + #13 } );
-      // Длина входящих байт
+      // Р”Р»РёРЅР° РІС…РѕРґСЏС‰РёС… Р±Р°Р№С‚
       nToWrite := Length(S { + #13 } ); // SizeOf
-      // пишем в порт
+      // РїРёС€РµРј РІ РїРѕСЂС‚
       S := Buf;
       WriteFile(hPort, Buf[1], nToWrite, LWrited, nil);
-      Memo1.Lines.Add( { s + } ' Количество переданных байт: ' +
+      Memo1.Lines.Add( { s + } ' РљРѕР»РёС‡РµСЃС‚РІРѕ РїРµСЂРµРґР°РЅРЅС‹С… Р±Р°Р№С‚: ' +
         IntToStr(LWrited) + ' :: ' + S);
 
       // Buf := AnsiString('');
@@ -550,10 +550,10 @@ begin
       end;
       // S := ANSI2KOI8R(S);
       // Memo1.Lines.Add(Buf);
-      Memo1.Lines.Add( { s + } 'Количество принятых байт: ' + IntToStr(LWrited)
+      Memo1.Lines.Add( { s + } 'РљРѕР»РёС‡РµСЃС‚РІРѕ РїСЂРёРЅСЏС‚С‹С… Р±Р°Р№С‚: ' + IntToStr(LWrited)
         + ' :: ' + S);
 
-      // Memo1.Lines.Add('Добавлено символов: ' + IntToStr(PostComm(Str, size)));
+      // Memo1.Lines.Add('Р”РѕР±Р°РІР»РµРЅРѕ СЃРёРјРІРѕР»РѕРІ: ' + IntToStr(PostComm(Str, size)));
       // end;
 
     end;
